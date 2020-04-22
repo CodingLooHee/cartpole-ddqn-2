@@ -24,10 +24,10 @@ if not os.path.exists(PATH):
     os.makedirs(PATH)
 
 if not os.path.exists(MODEL_PATH):
-    os.mkdir(MODEL_PATH)
+    os.makedirs(MODEL_PATH)
 
 if not os.path.exists(MEMORY_PATH):
-    os.mkdir(MEMORY_PATH)
+    os.makedirs(MEMORY_PATH)
 
 if os.path.exists(MODEL_FILE):
     q_network = tf.keras.models.load_model(MODEL_FILE)
