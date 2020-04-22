@@ -116,9 +116,9 @@ while True:
 
             for i in range(32):
                 if not d[i]:
-                    target[i] = r[i] + gamma * next_target[i][selected_next_target[i]]
+                    target[i][a[i]] = r[i] + gamma * next_target[i][selected_next_target[i]]
                 else:
-                    target[i] = r[i]
+                    target[i][a[i]] = r[i]
 
             q_network_fit(s, target, epochs=1, verbose=0)
 
