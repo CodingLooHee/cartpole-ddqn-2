@@ -26,6 +26,7 @@ if not os.path.exists(MEMORY_PATH):
 if os.path.exists(MODEL_FILE):
     q_network = tf.keras.models.load_model(MODEL_FILE)
     target_network = tf.keras.models.load_model(MODEL_FILE)
+    q_network.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='mse')
 else:
     q_network = tf.keras.Sequential([
         tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
@@ -44,8 +45,8 @@ else:
 
 env = gym.make('CartPole-v1')
 if os.path.exists(MEMORY_FILE):
-    with open(MEMORY_FILE, 'rb'):
-        memory = pickle.load(MEMORY_FILE)
+    with open(MEMORY_FILE, 'rb') as file:
+        memory = pickle.load(file)
 else:
     memory = deque(maxlen=2000)
 
