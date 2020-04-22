@@ -5,6 +5,10 @@ import random
 
 from collections import deque
 
+# Root path
+PATH = './'
+
+# TODO: Add check if file exist
 q_network = tf.keras.Sequential([
     tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
     tf.keras.layers.Dense(24, activation='relu'),
@@ -29,7 +33,6 @@ gamma = 0.95
 
 def train():
     batch = random.sample(memory, 32)
-    
     
     s, a, r, s2, d = [], [], [], [], []
     for i in batch:
@@ -82,4 +85,5 @@ while True:
             break
     
     target_network.set_weights(q_network.get_weights())
+    target_network.save(PATH + 'model/target_network.h5')
     print(f'Score: {score}')
