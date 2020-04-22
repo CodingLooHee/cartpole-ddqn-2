@@ -72,6 +72,8 @@ target_network_predict = target_network.predict
 env_step = env.step
 env_reset = env.reset
 
+memory_append = memory.append
+
 while True:
     state = env_reset()
     done = False
@@ -85,7 +87,7 @@ while True:
         
         old_state = state
         state, reward, done, _ = env_step(action)
-        memory.append([old_state, action, reward, state, done])
+        memory_append([old_state, action, reward, state, done])
         score += reward
 
         if len(memory) > 32:
