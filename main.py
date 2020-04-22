@@ -61,9 +61,17 @@ epsilon = 0.2
 gamma = 0.95
 
 
+np_array = np.array
+np_reshape = np.reshape
+
+q_network_predict = q_network.predict
+target_network_predict = target_network.predict
+
+env_step = env.step
+env_reset = env.reset
 
 while True:
-    state = env.reset()
+    state = env_reset()
     done = False
     score = 0
 
@@ -71,10 +79,10 @@ while True:
         if random.random() < epsilon:
             action = random.randint(0, 1)
         else:
-            action = q_network.predict(np.reshape(state, [1, 4])).argmax()
+            action = q_network_predict(np_reshape(state, [1, 4])).argmax()
         
         old_state = state
-        state, reward, done, _ = env.step(action)
+        state, reward, done, _ = env_step(action)
         memory.append([old_state, action, reward, state, done])
         score += reward
 
@@ -94,15 +102,15 @@ while True:
                 s2_append(i[3])
                 d_append(i[4])
             
-            s = np.array(s)
-            a = np.array(a)
-            r = np.array(r)
-            s2 = np.array(s2)
-            d = np.array(d)
+            s = np_array(s)
+            a = np_array(a)
+            r = np_array(r)
+            s2 = np_array(s2)
+            d = np_array(d)
 
-            target = q_network.predict(s)
-            next_target = target_network.predict(s2)
-            selected_next_target = q_network.predict(s2).argmax(axis=1)
+            target = q_network_predict(s)
+            next_target = target_network_predict(s2)
+            selected_next_target = q_network_predict(s2).argmax(axis=1)
 
             for i in range(32):
                 if not d[i]:
