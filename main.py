@@ -43,7 +43,7 @@ else:
 
 
 env = gym.make('CartPole-v1')
-if os.path.exists(MEMORY_PATH):
+if os.path.exists(MEMORY_FILE):
     with open(MEMORY_FILE, 'rb'):
         memory = pickle.load(MEMORY_FILE)
 else:
