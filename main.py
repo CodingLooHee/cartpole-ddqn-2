@@ -2,30 +2,53 @@ import tensorflow as tf
 import numpy as np
 import gym
 import random
+import pickle
+import os
 
 from collections import deque
+
 
 # Root path
 PATH = './'
 
-# TODO: Add check if file exist
-q_network = tf.keras.Sequential([
-    tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
-    tf.keras.layers.Dense(24, activation='relu'),
-    tf.keras.layers.Dense(2, activation='linear')
-])
-q_network.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='mse')
+# Model path
+MODEL_PATH = PATH + 'model/'
+MEMORY_PATH = PATH + 'memory/'
+MODEL_FILE = MODEL_PATH + 'target_network.h5'
+MEMORY_FILE = MEMORY_PATH + 'dequed_memory.pickle'
 
-target_network = tf.keras.Sequential([
-    tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
-    tf.keras.layers.Dense(24, activation='relu'),
-    tf.keras.layers.Dense(2, activation='linear')
-])
-target_network.set_weights(q_network.get_weights())
+if not os.path.exists(MODEL_PATH):
+    os.mkdir(MODEL_PATH)
+
+if not os.path.exists(MEMORY_PATH):
+    os.mkdir(MEMORY_PATH)
+
+if os.path.exists(MODEL_FILE):
+    q_network = tf.keras.models.load_model(MODEL_FILE)
+    target_network = tf.keras.models.load_model(MODEL_FILE)
+else:
+    q_network = tf.keras.Sequential([
+        tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
+        tf.keras.layers.Dense(24, activation='relu'),
+        tf.keras.layers.Dense(2, activation='linear')
+    ])
+    q_network.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='mse')
+
+    target_network = tf.keras.Sequential([
+        tf.keras.layers.Dense(24, activation='relu', input_shape=(4,)),
+        tf.keras.layers.Dense(24, activation='relu'),
+        tf.keras.layers.Dense(2, activation='linear')
+    ])
+    target_network.set_weights(q_network.get_weights())
 
 
 env = gym.make('CartPole-v1')
-memory = deque(maxlen=2000)
+if os.path.exists(MEMORY_PATH):
+    with open(MEMORY_FILE, 'rb'):
+        memory = pickle.load(MEMORY_FILE)
+else:
+    memory = deque(maxlen=2000)
+
 
 epsilon = 0.2
 gamma = 0.95
@@ -85,5 +108,7 @@ while True:
             break
     
     target_network.set_weights(q_network.get_weights())
-    target_network.save(PATH + 'model/target_network.h5')
+    target_network.save(MODEL_FILE)
+    with open(MEMORY_FILE, 'wb') as file:
+        pickle.dump(memory, file)
     print(f'Score: {score}')
