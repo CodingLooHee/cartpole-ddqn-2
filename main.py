@@ -65,6 +65,8 @@ np_array = np.array
 np_reshape = np.reshape
 
 q_network_predict = q_network.predict
+q_network_fit = q_network.fit
+
 target_network_predict = target_network.predict
 
 env_step = env.step
@@ -118,7 +120,7 @@ while True:
                 else:
                     target[i] = r[i]
 
-            q_network.fit(s, target, epochs=1, verbose=0)
+            q_network_fit(s, target, epochs=1, verbose=0)
 
 
         if done:
