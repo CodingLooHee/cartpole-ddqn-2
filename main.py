@@ -11,9 +11,11 @@ from collections import deque
 # Root path
 PATH = './'
 
-# Model path
+# Folder path
 MODEL_PATH = PATH + 'model/'
 MEMORY_PATH = PATH + 'memory/'
+
+# File path
 MODEL_FILE = MODEL_PATH + 'target_network.h5'
 MEMORY_FILE = MEMORY_PATH + 'dequed_memory.pickle'
 
