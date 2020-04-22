@@ -48,10 +48,6 @@ def train():
     target = q_network.predict(s)
     next_target = target_network.predict(s2)
     selected_next_target = q_network.predict(s2).argmax(axis=1)
-    '''
-    print(target)
-    print(next_target)
-    print(selected_next_target)'''
 
     for i in range(32):
         if not d[i]:
@@ -59,7 +55,7 @@ def train():
         else:
             target[i] = r[i]
 
-    q_network.fit(s, target, epochs=1, verbose=2)
+    q_network.fit(s, target, epochs=1, verbose=0)
 
 
 
@@ -76,7 +72,6 @@ while True:
         
         old_state = state
         state, reward, done, _ = env.step(action)
-        #state = np.reshape(state, [1, 4])
         memory.append([old_state, action, reward, state, done])
         score += reward
 
