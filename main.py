@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import gym
-import random
+from random import randint, random, sample
 import pickle
 import os
 
@@ -76,8 +76,8 @@ while True:
     score = 0
 
     while True:
-        if random.random() < epsilon:
-            action = random.randint(0, 1)
+        if random() < epsilon:
+            action = randint(0, 1)
         else:
             action = q_network_predict(np_reshape(state, [1, 4])).argmax()
         
@@ -87,7 +87,7 @@ while True:
         score += reward
 
         if len(memory) > 32:
-            batch = random.sample(memory, 32)
+            batch = sample(memory, 32)
     
             s, a, r, s2, d = [], [], [], [], []
             s_append = s.append
