@@ -20,6 +20,9 @@ MODEL_FILE = MODEL_PATH + 'target_network.h5'
 MEMORY_FILE = MEMORY_PATH + 'dequed_memory.pickle'
 HISTORY_FILE = MEMORY_PATH + 'history.txt'
 
+if not os.path.exists(PATH):
+    os.makedirs(PATH)
+
 if not os.path.exists(MODEL_PATH):
     os.mkdir(MODEL_PATH)
 
