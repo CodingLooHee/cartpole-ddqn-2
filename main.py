@@ -1,5 +1,7 @@
 import tensorflow as tf
+import numpy as np
 import gym
+import random
 
 from collections import deque
 
@@ -21,3 +23,33 @@ target_network.set_weights(q_network.get_weights())
 env = gym.make('CartPole-v1')
 memory = deque(maxlen=2000)
 
+epsilon = 0.2
+
+
+def train():
+    pass
+
+
+while True:
+    state = env.reset().reshape([1, 4])
+    done = False
+    score = 0
+
+    while True:
+        if random.random() < epsilon:
+            action = random.randint(0, 1)
+        else:
+            action = q_network.predict(state).argmax()
+        
+        old_state = state
+        state, reward, done, _ = env.step(action)
+        state = np.reshape(state, [1, 4])
+        memory.append([old_state, action, reward, state, done])
+        score += reward
+
+        train()
+
+        if done:
+            break
+    
+    print(f'Score: {score}')
