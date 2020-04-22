@@ -52,4 +52,5 @@ while True:
         if done:
             break
     
+    target_network.set_weights(q_network.get_weights())
     print(f'Score: {score}')
