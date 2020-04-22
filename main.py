@@ -27,7 +27,22 @@ epsilon = 0.2
 
 
 def train():
-    pass
+    batch = np.array(random.sample(memory, 32))
+
+    s = batch[:, 0]
+    a = batch[:, 1]
+    r = batch[:, 2]
+    s2 = batch[:, 3]
+    d = batch[:, 4]
+
+    target = q_network.predict(s)
+    next_target = target_network.predict(s2)
+    selected_next_target = q_network.predict(s2).argmax()
+    
+    print(target)
+    print(next_target)
+    print(selected_next_target)
+
 
 
 while True:
@@ -47,7 +62,8 @@ while True:
         memory.append([old_state, action, reward, state, done])
         score += reward
 
-        train()
+        if len(memory) > 32:
+            train()
 
         if done:
             break
