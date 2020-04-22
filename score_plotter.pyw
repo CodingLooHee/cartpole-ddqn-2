@@ -1,3 +1,4 @@
+'''Use to plot score graph'''
 import matplotlib.pyplot as plt
 
 # Root path
@@ -10,14 +11,13 @@ MEMORY_PATH = PATH + 'memory/'
 HISTORY_FILE = MEMORY_PATH + 'history.txt'
 
 with open(HISTORY_FILE, 'r') as f:
-    content = [float(x.strip()) for x in f.readlines()]
+    CONTENT = [float(x.strip()) for x in f.readlines()]
 
 
 plt.figure(num='DDQN TAXI Score History')
 
 
-y = [i for i in content]
-plt.plot(y)
+plt.plot(CONTENT)
 
 plt.xlabel('Episode')
 plt.ylabel('Score')
