@@ -61,36 +61,6 @@ epsilon = 0.2
 gamma = 0.95
 
 
-def train():
-    batch = random.sample(memory, 32)
-    
-    s, a, r, s2, d = [], [], [], [], []
-    for i in batch:
-        s.append(i[0])
-        a.append(i[1])
-        r.append(i[2])
-        s2.append(i[3])
-        d.append(i[4])
-    
-    s = np.array(s)
-    a = np.array(a)
-    r = np.array(r)
-    s2 = np.array(s2)
-    d = np.array(d)
-
-    target = q_network.predict(s)
-    next_target = target_network.predict(s2)
-    selected_next_target = q_network.predict(s2).argmax(axis=1)
-
-    for i in range(32):
-        if not d[i]:
-            target[i] = r[i] + gamma * next_target[i][selected_next_target[i]]
-        else:
-            target[i] = r[i]
-
-    q_network.fit(s, target, epochs=1, verbose=0)
-
-
 
 while True:
     state = env.reset()
@@ -109,7 +79,39 @@ while True:
         score += reward
 
         if len(memory) > 32:
-            train()
+            batch = random.sample(memory, 32)
+    
+            s, a, r, s2, d = [], [], [], [], []
+            s_append = s.append
+            a_append = a.append
+            r_append = r.append
+            s2_append = s2.append
+            d_append = d.append
+            for i in batch:
+                s_append(i[0])
+                a_append(i[1])
+                r_append(i[2])
+                s2_append(i[3])
+                d_append(i[4])
+            
+            s = np.array(s)
+            a = np.array(a)
+            r = np.array(r)
+            s2 = np.array(s2)
+            d = np.array(d)
+
+            target = q_network.predict(s)
+            next_target = target_network.predict(s2)
+            selected_next_target = q_network.predict(s2).argmax(axis=1)
+
+            for i in range(32):
+                if not d[i]:
+                    target[i] = r[i] + gamma * next_target[i][selected_next_target[i]]
+                else:
+                    target[i] = r[i]
+
+            q_network.fit(s, target, epochs=1, verbose=0)
+
 
         if done:
             break
