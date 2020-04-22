@@ -18,6 +18,7 @@ MEMORY_PATH = PATH + 'memory/'
 # File path
 MODEL_FILE = MODEL_PATH + 'target_network.h5'
 MEMORY_FILE = MEMORY_PATH + 'dequed_memory.pickle'
+HISTORY_FILE = MEMORY_PATH + 'history.txt'
 
 if not os.path.exists(MODEL_PATH):
     os.mkdir(MODEL_PATH)
@@ -114,4 +115,6 @@ while True:
     target_network.save(MODEL_FILE)
     with open(MEMORY_FILE, 'wb') as file:
         pickle.dump(memory, file)
+    with open(HISTORY_FILE, 'a') as file:
+        file.write(str(score) + '\n')
     print(f'Score: {score}')
